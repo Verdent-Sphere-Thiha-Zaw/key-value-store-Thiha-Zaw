@@ -5,16 +5,18 @@ on:
         - dev
 jobs:
   build:
-    name: "Build Laravel App"
+    name: Build Laravel App
     runs-on: ubuntu-latest
     steps: 
       - name: Setup PHP with PECL extension
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.2'
-      - name: "Checkout php"
+      - name: Checkout php
         uses: actions/checkout@v4
-
+      - name: Setup Env
+        run:  |
+          cp .env.ci .env
       - name: Install dependencies
         run: 
           composer install
