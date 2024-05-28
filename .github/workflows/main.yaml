@@ -10,4 +10,7 @@ jobs:
     steps: 
       - name: Install dependencies
         run: 
-          echo "Hello"
+          composer install
+      - name: Install dependencies
+        run: 
+          php artisan key:generate
