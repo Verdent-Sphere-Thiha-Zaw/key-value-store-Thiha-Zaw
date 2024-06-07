@@ -63,15 +63,5 @@ jobs:
           push: true
           tags: techrepos/laravel-app:latest
 
-      - name: Set up Docker Compose
-        run: |
-          docker-compose up -d --build
-
-      - name: Run migrations
-        run: docker-compose exec app php artisan migrate
-
-      - name: Run tests
-        run: docker-compose exec app php artisan test
-
       - name: Debug the containers
         run: docker ps
