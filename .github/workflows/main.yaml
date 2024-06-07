@@ -30,7 +30,7 @@ jobs:
 
       - name: Run Mysql
         run:
-          docker run -d -p 3306:3306 -e DB_CONNECTION=mysql -e DB_HOST=localhost -e DB_PORT=3306 -e DB_DATABASE=test -e DB_USERNAME=root -e DB_PASSWORD=password mysql:latest
+          docker run -d -p 3306:3306 -e DB_CONNECTION=mysql -e DB_HOST=127.0.0.1 -e DB_PORT=3306 -e DB_DATABASE=test -e DB_USERNAME=root -e DB_PASSWORD=password mysql:latest
 
       - name: debug the container
         run:
