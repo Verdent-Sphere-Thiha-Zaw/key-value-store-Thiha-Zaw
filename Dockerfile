@@ -15,3 +15,5 @@ COPY ./storage ./storage
 COPY ./tests ./tests
 RUN composer install
 RUN php artisan key:generate
+ENTRYPOINT [ "php","artisan","serve" ]
+CMD ["--port=8080" ]
