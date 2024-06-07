@@ -3,6 +3,10 @@ on:
     push:
       branches:
         - dev
+    pull_request:
+      branches:
+        - dev
+        - main
 jobs:
   build:
     name: Build Laravel App
@@ -13,6 +17,9 @@ jobs:
         ports: 
           - 3306:3306
         env:
+          DB_CONNECTION: mysql
+          DB_HOST: 127.0.0.1
+          DB_PORT: 3306
           DB_DATABASE: test
           DB_USERNAME: root
           DB_PASSWORD: password
@@ -48,3 +55,6 @@ jobs:
       - name: Run unit testing
         run: |
           php artisan test
+
+      - name: Build as a Docker Image
+        run: 
