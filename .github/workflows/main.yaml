@@ -13,9 +13,9 @@ jobs:
         ports: 
           - 3306:3306
         env:
-          DB_DATABASE:test
-          DB_USERNAME:root
-          DB_PASSWORD:password
+          DB_DATABASE: test
+          DB_USERNAME: root
+          DB_PASSWORD: password
     steps: 
       - name: Setup PHP with PECL extension
         uses: shivammathur/setup-php@v2
