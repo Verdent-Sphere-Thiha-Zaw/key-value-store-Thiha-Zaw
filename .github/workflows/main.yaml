@@ -12,17 +12,30 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.2'
+
       - name: Checkout php
         uses: actions/checkout@v4
+
       - name: Setup Env
         run:  |
           cp .env.ci .env
+
       - name: Install dependencies
         run: 
           composer install
-      - name: Install dependencies
+
+      - name: Generate the Key
         run: 
           php artisan key:generate
+
+      - name: Run Mysql
+        run:
+          docker run -d -p 3306:3306 mysql:latest
+
+      - name: Migrate the Database
+        run:
+          php artisan migrate
+
       - name: Run unit testing
         run: |
           php artisan test
