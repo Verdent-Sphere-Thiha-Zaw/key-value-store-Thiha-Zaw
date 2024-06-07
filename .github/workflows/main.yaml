@@ -64,8 +64,8 @@ jobs:
           push: true
           tags: techrepos/laravel-app:latest
 
-      #- name: Run Docker Compose
-      #  run: docker-compose up -d --build
+      - name: Run Docker Compose
+        run: docker-compose up -d --build
 
       - name: Debug the container
         run: docker ps
