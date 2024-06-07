@@ -7,6 +7,17 @@ jobs:
   build:
     name: Build Laravel App
     runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: sql:latest
+        ports: 3306:3306
+        env:
+          DB_CONNECTION:mysql
+          DB_HOST:127.0.0.1
+          DB_PORT:3306 
+          DB_DATABASE:test
+          DB_USERNAME:root
+          DB_PASSWORD:password
     steps: 
       - name: Setup PHP with PECL extension
         uses: shivammathur/setup-php@v2
@@ -27,11 +38,7 @@ jobs:
       - name: Generate the Key
         run: 
           php artisan key:generate
-
-      - name: Run Mysql
-        run:
-          docker run -d -p 3306:3306 -e DB_CONNECTION=mysql -e DB_HOST=127.0.0.1 -e DB_PORT=3306 -e DB_DATABASE=test -e DB_USERNAME=root -e DB_PASSWORD=password mysql:latest
-
+          
       - name: debug the container
         run:
           docker ps
