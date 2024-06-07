@@ -1,12 +1,14 @@
-name: "Main Workflow"
+name: Main Workflow
+
 on:
-    push:
-      branches:
-        - dev
-    pull_request:
-      branches:
-        - dev
-        - main
+  push:
+    branches:
+      - dev
+  pull_request:
+    branches:
+      - dev
+      - main
+
 jobs:
   build:
     name: Build Laravel App
@@ -16,6 +18,38 @@ jobs:
         image: mysql:latest
         ports: 
           - 3306:3306
+        options: > 
+          --health-cmd="mysqladmin ping --silent" 
+          --health-interval=10s 
+          --health-timeout=5s 
+          --health-retries=3 
+        env:
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_DATABASE: test
+          MYSQL_USER: root
+          MYSQL_PASSWORD: password
+
+    steps: 
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup PHP with PECL extension
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mbstring, pdo_mysql
+
+      - name: Setup Environment
+        run:  |
+          cp .env.ci .env
+
+      - name: Install dependencies
+        run: composer install
+
+      - name: Generate the Key
+        run: php artisan key:generate
+
+      - name: Run migrations
         env:
           DB_CONNECTION: mysql
           DB_HOST: 127.0.0.1
@@ -23,31 +57,34 @@ jobs:
           DB_DATABASE: test
           DB_USERNAME: root
           DB_PASSWORD: password
-    steps: 
-      - name: Setup PHP with PECL extension
-        uses: shivammathur/setup-php@v2
+        run: php artisan migrate
+
+      - name: Run tests
+        env:
+          DB_CONNECTION: mysql
+          DB_HOST: 127.0.0.1
+          DB_PORT: 3306
+          DB_DATABASE: test
+          DB_USERNAME: root
+          DB_PASSWORD: password
+        run: php artisan test
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
         with:
-          php-version: '8.2'
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Checkout php
-        uses: actions/checkout@v4
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/laravel-app:latest
 
-      - name: Setup Env
-        run:  |
-          cp .env.ci .env
-
-      - name: Install dependencies
-        run: 
-          composer install
-
-      - name: Generate the Key
-        run: 
-          php artisan key:generate
-
-      - name: debug the container
-        run:
-          docker ps
-
-      - name: Build and push Docker images
-        uses: docker/build-push-action@v5.3.0
-            
+      - name: Debug the container
+        run: docker ps
