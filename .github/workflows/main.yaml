@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     services:
       mysql:
-        image: sql:latest
+        image: mysql:latest
         ports: 
           - 3306:3306
         env:
