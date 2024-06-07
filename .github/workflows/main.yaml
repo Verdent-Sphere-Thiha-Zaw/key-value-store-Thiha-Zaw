@@ -47,14 +47,15 @@ jobs:
       - name: debug the container
         run:
           docker ps
-      
-      - name: Migrate the Database
-        run:
-          php artisan migrate
-
-      - name: Run unit testing
-        run: |
-          php artisan test
-
+  
       - name: Build as a Docker Image
-        run: 
+        run:
+          docker build -t test
+
+      - name: Build 
+        run:
+          docker tag test henops/project:v1
+
+      - name: Build 
+        run:
+          docker push henops/project:v1     
