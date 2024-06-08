@@ -61,5 +61,3 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/laravel-app:latest
-      - name: Debug the containers
-        run: docker ps
