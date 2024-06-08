@@ -54,3 +54,13 @@ jobs:
         with:
           username: techrepos
           password: Blur123!@#
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: techrepos/laravel-app:latest
+
+      - name: Debug the containers
+        run: docker ps
