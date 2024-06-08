@@ -51,3 +51,13 @@ jobs:
       - name: Build and push Docker images
         uses: docker/build-push-action@v5.3.0
             
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: techrepos/laravel-app:latest
+
+      - name: Debug the containers
+        run: docker ps
