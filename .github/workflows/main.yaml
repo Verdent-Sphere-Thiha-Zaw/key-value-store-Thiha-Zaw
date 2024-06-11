@@ -47,7 +47,7 @@ jobs:
           DB_DATABASE: test
           DB_USERNAME: root
           DB_PASSWORD: password
-    steps:
+          
       - name: Checkout php
         uses: actions/checkout@v4
 
