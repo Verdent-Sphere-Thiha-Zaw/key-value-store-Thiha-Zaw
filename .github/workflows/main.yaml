@@ -29,6 +29,12 @@ jobs:
         run: 
           composer install
 
+      - name: Cache the app dependencies
+        uses: actions/cache@v4.0.2
+        with:
+          key: php-vendor-cache
+          path: ./vendor
+
       - name: Generate the Key
         run: 
           php artisan key:generate
@@ -59,10 +65,16 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.2'
-          
-      - name: Install dependencies
-        run: 
-          composer install
+
+      # - name: Install dependencies
+      #   run: 
+      #     composer install
+
+      - name: Restore the cache
+        uses: actions/cache@v4.0.2
+        with:
+          path: vendor
+          key: php-vendor-cache
 
       - name: Generate the Key
         run: 
