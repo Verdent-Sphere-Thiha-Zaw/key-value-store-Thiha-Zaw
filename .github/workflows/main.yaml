@@ -36,7 +36,6 @@ jobs:
   test:
     name: Test Laravel App
     runs-on: ubuntu-latest
-    steps:
     services:
       mysql:
         image: mysql:latest
@@ -47,7 +46,7 @@ jobs:
           DB_DATABASE: test
           DB_USERNAME: root
           DB_PASSWORD: password
-          
+    steps:
       - name: Checkout php
         uses: actions/checkout@v4
 
