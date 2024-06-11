@@ -64,9 +64,9 @@ jobs:
         run: 
           php artisan key:generate
 
-      - name: Migrate the database
-        run:
-          php artisan migrate
+      # - name: Migrate the database
+      #   run:
+      #     php artisan migrate
           
       - name: debug the container
         run:
