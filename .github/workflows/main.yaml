@@ -11,16 +11,6 @@ jobs:
   build:
     name: Build Laravel App
     runs-on: ubuntu-latest
-    services:
-      mysql:
-        image: mysql:latest
-        ports: 
-          - 3306:3306
-        env:
-          MYSQL_ROOT_PASSWORD: password
-          DB_DATABASE: test
-          DB_USERNAME: root
-          DB_PASSWORD: password
     steps: 
       - name: Setup PHP with PECL extension
         uses: shivammathur/setup-php@v2
@@ -33,6 +23,38 @@ jobs:
       - name: Setup Env
         run:  |
           cp .env.ci .env
+          cp .env.ci .env.testing
+
+      - name: Install dependencies
+        run: 
+          composer install
+
+      - name: Generate the Key
+        run: 
+          php artisan key:generate
+  
+  test:
+    name: Test Laravel App
+    runs-on: ubuntu-latest
+    steps:
+    services:
+      mysql:
+        image: mysql:latest
+        ports: 
+          - 3306:3306
+        env:
+          MYSQL_ROOT_PASSWORD: password
+          DB_DATABASE: test
+          DB_USERNAME: root
+          DB_PASSWORD: password
+    steps:
+      - name: Checkout php
+        uses: actions/checkout@v4
+
+      - name: Setup Env
+        run:  |
+          cp .env.ci .env
+          cp .env.ci .env.testing
 
       - name: Install dependencies
         run: 
@@ -42,6 +64,10 @@ jobs:
         run: 
           php artisan key:generate
 
+      - name: Migrate the database
+        run:
+          php artisan migrate
+          
       - name: debug the container
         run:
           docker ps
@@ -61,3 +87,4 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/laravel-app:latest
+          
