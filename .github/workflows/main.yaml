@@ -17,7 +17,7 @@ jobs:
     needs: [build]
     services:
       mysql:
-        image: mysql:latest
+        image: mysql:8.0
         ports: 
           - 3306:3306
         env:
@@ -59,9 +59,9 @@ jobs:
         run: 
           php artisan key:generate
 
-      # - name: Migrate the database
-      #   run:
-      #     php artisan migrate
+      - name: Migrate the database
+        run:
+          php artisan migrate
           
       # - name: debug the container
       #   run:
