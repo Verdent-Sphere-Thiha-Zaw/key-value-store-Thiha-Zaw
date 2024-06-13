@@ -1,0 +1,69 @@
+name: "Main Workflow"
+
+on:
+  push:
+    branches:
+      - dev
+  pull_request:
+    branches:
+      - dev
+      - main
+
+jobs:
+  build:
+    name: Build Laravel App
+    runs-on: ubuntu-latest
+    steps: 
+      - name: Use reusable workflow for build
+        uses: ./.github/workflows/reusable-workflow.yaml
+        with:
+          php-version: '8.2'
+
+      - name: Cache dependencies
+        uses: actions/cache@v4.0.2
+        with:
+          key: ${{ github.sha }}-php-vendor-cache
+          path: ./vendor
+
+      - name: Generate the key
+        run: php artisan key:generate
+  test:
+    name: Test Laravel App
+    runs-on: ubuntu-latest
+    needs: [build]
+    services:
+      mysql:
+        image: mysql:latest
+        ports: 
+          - 3306:3306
+        env:
+          MYSQL_ROOT_PASSWORD: password
+          DB_DATABASE: test
+          DB_USERNAME: root
+          DB_PASSWORD: password
+    steps:
+      # - name: Checkout repository
+      #   uses: actions/checkout@v4
+
+      - name: Use reusable workflow for test setup
+        uses: ./.github/workflows/reusable-workflow.yaml
+        with:
+          php-version: '8.2'
+       
+      # Additional test-specific steps can be added here
+
+      - name: Restore the cache
+        id: cache
+        uses: actions/cache@v4.0.2
+        with:
+          path: ./vendor
+          key: php-vendor-cache
+
+      - name: Composer install
+        if: steps.cache.outputs.cache-hit != 'true'
+        run:
+          composer install
+
+      - name: Generate the Key
+        run: 
+          php artisan key:generate

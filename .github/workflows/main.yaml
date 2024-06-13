@@ -1,32 +1,16 @@
 name: "Main Workflow"
 
 on:
-  push:
-    branches:
-      - dev
-  pull_request:
-    branches:
-      - dev
-      - main
+    push:
+    pull_request:
+      branches:
+        - dev
+        - main
 
 jobs:
   build:
-    name: Build Laravel App
-    runs-on: ubuntu-latest
-    steps: 
-      - name: Use reusable workflow for build
-        uses: ./.github/workflows/reusable-workflow.yaml
-        with:
-          php-version: '8.2'
-
-      - name: Cache dependencies
-        uses: actions/cache@v4.0.2
-        with:
-          key: ${{ github.sha }}-php-vendor-cache
-          path: ./vendor
-
-      - name: Generate the key
-        run: php artisan key:generate
+    uses: ./.github/workflows/build.yaml
+  
   test:
     name: Test Laravel App
     runs-on: ubuntu-latest
@@ -42,15 +26,22 @@ jobs:
           DB_USERNAME: root
           DB_PASSWORD: password
     steps:
-      # - name: Checkout repository
-      #   uses: actions/checkout@v4
+      - name: Checkout php
+        uses: actions/checkout@v4
 
-      - name: Use reusable workflow for test setup
-        uses: ./.github/workflows/reusable-workflow.yaml
+      - name: Setup Env
+        run:  |
+          cp .env.ci .env
+          cp .env.ci .env.testing
+
+      - name: Setup PHP with PECL extension
+        uses: shivammathur/setup-php@v2
         with:
           php-version: '8.2'
-       
-      # Additional test-specific steps can be added here
+
+      # - name: Install dependencies
+      #   run: 
+      #     composer install
 
       - name: Restore the cache
         id: cache
@@ -67,3 +58,28 @@ jobs:
       - name: Generate the Key
         run: 
           php artisan key:generate
+
+      # - name: Migrate the database
+      #   run:
+      #     php artisan migrate
+          
+      # - name: debug the container
+      #   run:
+      #     docker ps
+
+      # - name: Set up Docker Buildx
+      #   uses: docker/setup-buildx-action@v2
+
+      # - name: Log in to Docker Hub
+      #   uses: docker/login-action@v2
+      #   with:
+      #     username: ${{ secrets.DOCKERHUB_USERNAME }}
+      #     password: ${{ secrets.DOCKERHUB_TOKEN }}
+      # - name: Build and push Docker image
+      #   uses: docker/build-push-action@v3
+      #   with:
+      #     context: .
+      #     file: ./Dockerfile
+      #     push: true
+      #     tags: ${{ secrets.DOCKERHUB_USERNAME }}/laravel-app:latest
+          
