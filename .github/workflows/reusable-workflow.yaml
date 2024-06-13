@@ -6,15 +6,16 @@ on:
       php-version:
         required: true
         type: string
-    secrets:
-      required-secrets:
-        required: true
+    # secrets:
+    #   required-secrets:
+    #     required: true
 
 jobs:
   setup:
     runs-on: ubuntu-latest
     steps:
-
+      - name: Checkout repository
+        uses: actions/checkout@v4
       - name: Setup PHP with PECL extension
         uses: shivammathur/setup-php@v2
         with:
