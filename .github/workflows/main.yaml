@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     steps: 
       - name: Use reusable workflow for build
-        uses: ./.github/workflows/reusable-workflow.yml
+        uses: ./.github/workflows/reusable-workflow.yaml
         with:
           php-version: '8.2'
 
