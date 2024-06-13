@@ -14,6 +14,9 @@ jobs:
     name: Build Laravel App
     runs-on: ubuntu-latest
     steps: 
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
       - name: Use reusable workflow for build
         uses: ./.github/workflows/reuse_workflow.yml
         with:
@@ -42,6 +45,9 @@ jobs:
           DB_USERNAME: root
           DB_PASSWORD: password
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
       - name: Use reusable workflow for test setup
         uses: ./.github/workflows/reuse_workflow.yml
         with:
