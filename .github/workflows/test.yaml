@@ -18,6 +18,9 @@ jobs:
         ports: 
           - 3306:3306
         env:
+          DB_CONNECTION: mysql
+          DB_HOST: 127.0.0.1
+          DB_PORT: 3306
           MYSQL_ROOT_PASSWORD: password
           DB_DATABASE: test
           DB_USERNAME: root
@@ -29,7 +32,6 @@ jobs:
       - name: Setup Env
         run:  |
           cp .env.ci .env
-          cp .env.ci .env.testing
 
       - name: Setup PHP with PECL extension
         uses: shivammathur/setup-php@v2
@@ -56,9 +58,9 @@ jobs:
         run: 
           php artisan key:generate
 
-      # - name: Migrate the database
-      #   run:
-      #     php artisan migrate
+      - name: Migrate the database
+        run:
+          php artisan migrate
           
       # - name: debug the container
       #   run:
