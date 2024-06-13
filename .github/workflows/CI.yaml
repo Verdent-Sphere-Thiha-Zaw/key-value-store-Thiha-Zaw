@@ -1,4 +1,4 @@
-name: "Main Workflow"
+name: "CI Workflow"
 
 on:
     push:
@@ -9,7 +9,10 @@ on:
 
 jobs:
   build:
+    name: Build laravel app
     uses: ./.github/workflows/build.yaml
+    with:
+      version: "8.2"
   
   test:
     name: Test Laravel App
