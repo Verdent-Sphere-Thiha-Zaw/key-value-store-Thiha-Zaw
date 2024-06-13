@@ -1,10 +1,11 @@
 name: "Reusable Workflow"
 
-on: workflow_call
-    # inputs:
-    #   php-version:
-    #     required: true
-    #     type: string
+on: 
+  workflow_call:
+    inputs:
+      php-version:
+        required: true
+        type: string
     # secrets:
     #   required-secrets:
     #     required: true
@@ -17,7 +18,7 @@ jobs:
       - name: Setup PHP with PECL extension
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.2'
+          php-version: ${{inputs.php-version}}
 
       - name: Checkout php
         uses: actions/checkout@v4

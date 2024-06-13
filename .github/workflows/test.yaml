@@ -27,19 +27,11 @@ jobs:
     steps:
       - name: Checkout php
         uses: actions/checkout@v4
-
-      - name: Setup Env
-        run:  |
-          cp .env.ci .env
-
+      
       - name: Setup PHP with PECL extension
         uses: shivammathur/setup-php@v2
         with:
-          php-version: ${{inputs.version}}
-
-      # - name: Install dependencies
-      #   run: 
-      #     composer install
+          php-version: ${{inputs.php-version}}
 
       - name: Restore the cache
         id: cache

@@ -18,4 +18,5 @@ jobs:
     name: Test Laravel App
     needs: [build]
     uses: ./.github/workflows/test.yaml
-    
+    with:
+      php-version: "8.2"    
