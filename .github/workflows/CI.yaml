@@ -12,7 +12,7 @@ jobs:
     name: Build laravel app
     uses: ./.github/workflows/build.yaml
     with:
-      version: "8.2"
+      php-version: "8.2"
   
   test:
     name: Test Laravel App

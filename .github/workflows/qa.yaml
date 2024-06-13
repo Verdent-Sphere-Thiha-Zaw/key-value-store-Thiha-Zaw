@@ -7,10 +7,10 @@ jobs:
     name: Build laravel app
     uses: ./.github/workflows/build.yaml
     with:
-      version: "8.2"
+      php-version: "8.2"
   
   build-with-version-83:
     name: Build Laravel App
     uses: ./.github/workflows/build.yaml
     with:
-      version: "8.3"
+      php-version: "8.3"
